@@ -57,7 +57,6 @@ use Magento\Store\Model\StoreManagerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Zend_Db_Exception;
 use Zend_Db_Expr as Expr;
-use Zend_Db_Select;
 use Zend_Db_Statement_Exception;
 use Zend_Db_Statement_Pdo;
 
@@ -2710,7 +2709,7 @@ class Product extends JobImport
 
             // rewrite "WHERE" condition
             $deleteQuery
-                ->reset(Zend_Db_Select::WHERE)
+                ->reset(Select::WHERE)
                 ->where("$linkTableAlias.link_type_id = ?", $linkType);
 
             /* Remove old link */
@@ -2787,9 +2786,9 @@ class Product extends JobImport
         if ($rowIdExists) {
             $this->entities->addJoinForContentStaging($select, []);
             /** @var array $fromPart */
-            $fromPart = $select->getPart(Zend_Db_Select::FROM);
+            $fromPart = $select->getPart(Select::FROM);
             $fromPart['p']['joinCondition'] = 'product_id = p.entity_id';
-            $select->setPart(Zend_Db_Select::FROM, $fromPart);
+            $select->setPart(Select::FROM, $fromPart);
         } else {
             $select->joinInner(
                 ['p' => $productsTable],
